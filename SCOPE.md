@@ -1,4 +1,4 @@
-# SCOPE — tf-mod-azuread-directory-role
+# SCOPE — terraform-azuread-directory-role
 
 ## Design intent
 Manages Azure AD directory role activation and assignments. Built-in roles are activated via template_id.
@@ -29,9 +29,9 @@ Manages Azure AD directory role activation and assignments. Built-in roles are a
 ## Consumes
 | Input | Type | Source module |
 |---|---|---|
-| `principal_object_id` | string (per assignment) | `tf-mod-azuread-user.object_id, tf-mod-azuread-service-principal.object_id, or tf-mod-azuread-group.object_id` |
-| `*.role_id` / `*.role_definition_id` (optional) | string | `tf-mod-azuread-custom-directory-role.object_id` (defaults to this role's `template_id`) |
-| `*.directory_scope_id` (optional) | string | `tf-mod-azuread-administrative-unit.object_id` (formatted `/<id>`), or `"/"` for tenant-wide |
+| `principal_object_id` | string (per assignment) | `terraform-azuread-user.object_id, terraform-azuread-service-principal.object_id, or terraform-azuread-group.object_id` |
+| `*.role_id` / `*.role_definition_id` (optional) | string | `terraform-azuread-custom-directory-role.object_id` (defaults to this role's `template_id`) |
+| `*.directory_scope_id` (optional) | string | `terraform-azuread-administrative-unit.object_id` (formatted `/<id>`), or `"/"` for tenant-wide |
 
 ## Graph API permissions required
 The Terraform service principal requires (application permissions, both **require admin consent**):

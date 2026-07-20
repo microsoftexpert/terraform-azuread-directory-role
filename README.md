@@ -36,16 +36,16 @@ Whether it's a star, a professional connection, or a coffee, every gesture helps
 
 ```mermaid
 flowchart LR
- user["tf-mod-azuread-user"]
- group["tf-mod-azuread-group"]
- sp["tf-mod-azuread-service-principal"]
- custom["tf-mod-azuread-custom-directory-role"]
- au["tf-mod-azuread-administrative-unit"]
+ user["terraform-azuread-user"]
+ group["terraform-azuread-group"]
+ sp["terraform-azuread-service-principal"]
+ custom["terraform-azuread-custom-directory-role"]
+ au["terraform-azuread-administrative-unit"]
 
- dr["tf-mod-azuread-directory-role"]
+ dr["terraform-azuread-directory-role"]
 
- ap["tf-mod-azuread-access-package"]
- pim["tf-mod-azuread-pim-group"]
+ ap["terraform-azuread-access-package"]
+ pim["terraform-azuread-pim-group"]
 
  user -- "object_id (principal)" --> dr
  group -- "object_id (principal)" --> dr
@@ -149,7 +149,7 @@ The Terraform **service principal** needs the following Microsoft Graph **applic
 ## 📁 Module Structure
 
 ```
-tf-mod-azuread-directory-role/
+terraform-azuread-directory-role/
 ├── providers.tf # azuread >= 2.0, < 4.0; Terraform >= 1.12.0 (no provider block)
 ├── variables.tf # display_name → template_id → 3 collection maps → timeouts
 ├── main.tf # keystone this + 3 for_each children + 3 data sources
@@ -164,7 +164,7 @@ tf-mod-azuread-directory-role/
 
 ```hcl
 module "security_admin_role" {
-  source = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
 
   # Activate by stable template ID (preferred over display_name)
   template_id = "194ae4cb-b126-40b2-bd5b-6091b380977d" # Security Administrator
@@ -185,11 +185,11 @@ module "security_admin_role" {
 
 | Input | Type | Source module |
 |---|---|---|
-| `role_assignments[*].principal_object_id` | string | `tf-mod-azuread-user.object_id`, `tf-mod-azuread-group.object_id`, or `tf-mod-azuread-service-principal.object_id` |
+| `role_assignments[*].principal_object_id` | string | `terraform-azuread-user.object_id`, `terraform-azuread-group.object_id`, or `terraform-azuread-service-principal.object_id` |
 | `role_members[*].member_object_id` | string | same as above |
 | `eligibility_schedule_requests[*].principal_id` | string | same as above |
-| `*.role_id` / `*.role_definition_id` (optional) | string | `tf-mod-azuread-custom-directory-role.object_id` (defaults to this role's `template_id`) |
-| `*.directory_scope_id` (optional) | string | `tf-mod-azuread-administrative-unit.object_id` (formatted `/<id>`), or `"/"` for tenant-wide |
+| `*.role_id` / `*.role_definition_id` (optional) | string | `terraform-azuread-custom-directory-role.object_id` (defaults to this role's `template_id`) |
+| `*.directory_scope_id` (optional) | string | `terraform-azuread-administrative-unit.object_id` (formatted `/<id>`), or `"/"` for tenant-wide |
 
 ### Emits
 
@@ -215,7 +215,7 @@ module "security_admin_role" {
 
 ```hcl
 module "printer_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "644ef478-e28f-4e28-b9dc-3fdde9aa0b1f" # Printer Administrator
 }
 ```
@@ -226,7 +226,7 @@ module "printer_admin" {
 
 ```hcl
 module "helpdesk_admin" {
-  source       = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source       = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   display_name = "Helpdesk Administrator"
 }
 ```
@@ -238,7 +238,7 @@ module "helpdesk_admin" {
 
 ```hcl
 module "sec_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "194ae4cb-b126-40b2-bd5b-6091b380977d" # Security Administrator
 
   role_assignments = {
@@ -256,7 +256,7 @@ module "sec_admin" {
 
 ```hcl
 module "scoped_user_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "fe930be7-5e62-47db-91af-98c3a49a38b1" # User Administrator
 
   role_assignments = {
@@ -275,7 +275,7 @@ module "scoped_user_admin" {
 
 ```hcl
 module "cloud_app_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "158c047a-c907-4556-b7ef-446551a6b5f7" # Cloud Application Administrator
 
   role_assignments = {
@@ -293,7 +293,7 @@ module "cloud_app_admin" {
 
 ```hcl
 module "custom_role_grant" {
-  source       = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source       = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   display_name = "Global Reader" # any activated built-in keystone
 
   role_assignments = {
@@ -312,7 +312,7 @@ module "custom_role_grant" {
 
 ```hcl
 module "legacy_role" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "729827e3-9c14-49f7-bb1b-9608f156bbb8" # Helpdesk Administrator
 
   role_members = {
@@ -330,7 +330,7 @@ module "legacy_role" {
 
 ```hcl
 module "jit_app_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3" # Application Administrator
 
   eligibility_schedule_requests = {
@@ -349,7 +349,7 @@ The principal becomes **eligible**; they must still *activate* the role (with MF
 
 ```hcl
 module "auth_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "c4e39bd9-1100-46d3-8c65-fb160da0071f" # Authentication Administrator
 
   role_assignments = {
@@ -371,7 +371,7 @@ module "auth_admin" {
 
 ```hcl
 module "global_reader" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "f2ef992c-3afb-46b9-b7cf-a126ee74c451" # Global Reader
 
   role_assignments = {
@@ -390,7 +390,7 @@ module "global_reader" {
 
 ```hcl
 module "privileged_role_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "e8611ab8-c189-46e8-94e1-60213ab1f814" # Privileged Role Administrator
 
   # Zero standing assignments for tier-0 roles — eligibility only.
@@ -415,7 +415,7 @@ module "privileged_role_admin" {
 
 ```hcl
 module "hardened_user_admin" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "fe930be7-5e62-47db-91af-98c3a49a38b1" # User Administrator
 
   eligibility_schedule_requests = {
@@ -435,7 +435,7 @@ No standing access, scoped to an administrative unit, justification carries a ch
 
 ```hcl
 module "roles" {
-  source       = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source       = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   display_name = "Security Administrator"
 }
 
@@ -452,19 +452,19 @@ output "billing_admin_template_id" {
 ```hcl
 # 1) Upstream identity — a security group of administrators
 module "soc_admins" {
-  source       = "git::https://github.com/microsoftexpert/tf-mod-azuread-group?ref=v1.0.0"
+  source       = "git::https://github.com/microsoftexpert/terraform-azuread-group?ref=v1.0.0"
   display_name = "SOC-Administrators"
 }
 
 # 2) Upstream identity — a pipeline service principal
 module "pipeline_sp" {
-  source       = "git::https://github.com/microsoftexpert/tf-mod-azuread-service-principal?ref=v1.0.0"
+  source       = "git::https://github.com/microsoftexpert/terraform-azuread-service-principal?ref=v1.0.0"
   display_name = "sp-security-pipeline"
 }
 
 # 3) THIS module — activate Security Administrator, standing for the SP, eligible for the SOC group
 module "security_admin_role" {
-  source      = "git::https://github.com/microsoftexpert/tf-mod-azuread-directory-role?ref=v1.0.0"
+  source      = "git::https://github.com/microsoftexpert/terraform-azuread-directory-role?ref=v1.0.0"
   template_id = "194ae4cb-b126-40b2-bd5b-6091b380977d" # Security Administrator
 
   role_assignments = {
@@ -596,7 +596,7 @@ object({
 ## 🚀 Runbook
 
 ```powershell
-cd C:\GitHubCode\newazureadmodules\tf-mod-azuread-directory-role
+cd C:\GitHubCode\newazureadmodules\terraform-azuread-directory-role
 terraform init -backend=false
 terraform validate
 terraform fmt -check
@@ -657,7 +657,7 @@ eligible_principal_ids = {
 - [Microsoft Entra built-in roles (template IDs)](https://learn.microsoft.com/entra/identity/role-based-access-control/permissions-reference)
 - [What is Microsoft Entra Privileged Identity Management?](https://learn.microsoft.com/entra/id-governance/privileged-identity-management/pim-configure)
 - [Microsoft Graph permissions reference](https://learn.microsoft.com/graph/permissions-reference)
-- Sibling modules: `tf-mod-azuread-custom-directory-role`, `tf-mod-azuread-pim-group`, `tf-mod-azuread-administrative-unit`, `tf-mod-azuread-group`
+- Sibling modules: `terraform-azuread-custom-directory-role`, `terraform-azuread-pim-group`, `terraform-azuread-administrative-unit`, `terraform-azuread-group`
 
 ---
 
